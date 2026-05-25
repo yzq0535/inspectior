@@ -31,7 +31,6 @@ export default function Login() {
           </svg>
         </div>
         <h1>任务巡检系统</h1>
-        <p>飞书自建应用</p>
       </div>
 
       <div className="login-form">
