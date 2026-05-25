@@ -29,61 +29,184 @@ const defaultUsers = [
 
 const defaultTasks = [
   {
-    id: 'task001',
-    name: '日常巡检',
-    description: '每日例行巡检任务，请仔细检查每个项目',
+    id: 'task_daily_outside',
+    name: '日巡检-店外区域',
+    description: '每日例行检查店外各项工作',
+    taskType: 'daily',
     items: [
-      {
-        id: 'item001',
-        title: '检查桌面卫生',
-        description: '检查办公区域桌面是否整洁、无垃圾、无灰尘',
-        requirePhoto: true,
-        required: true
-      },
-      {
-        id: 'item002',
-        title: '检查货品摆放',
-        description: '检查货架/仓库货品摆放是否整齐有序',
-        requirePhoto: true,
-        required: true
-      },
-      {
-        id: 'item003',
-        title: '检查门窗状态',
-        description: '检查门窗是否关闭正常',
-        requirePhoto: false,
-        required: true
-      },
-      {
-        id: 'item004',
-        title: '检查设备运行',
-        description: '检查办公设备是否正常运行',
-        requirePhoto: false,
-        required: false
-      }
+      { id: 'item_o1', title: '门口堆头检查', description: '摆放合理、整齐干净、品类搭配合理、商品有价签、价签无破损', requirePhoto: true, required: true },
+      { id: 'item_o2', title: '门口车位预留（下午班）', description: '佰和悦府店下午班预留门口车位', requirePhoto: false, required: true },
+      { id: 'item_o3', title: '门口卫生', description: '地面干净、无垃圾、已清洗、休闲椅干净整齐无破损', requirePhoto: true, required: true },
+      { id: 'item_o4', title: '门口垃圾桶', description: '无垃圾遗留、已清理、套袋、未满溢、需要更换', requirePhoto: true, required: true },
+      { id: 'item_o5', title: '进门地垫', description: '清洗干净、无纸屑垃圾', requirePhoto: true, required: true },
+      { id: 'item_o6', title: '门前电器设备', description: '冰柜、啤酒柜通电、插座电源防水安全、擦洗干净整洁', requirePhoto: true, required: true },
+      { id: 'item_o7', title: '广告招牌', description: '店内外广告是新的、无歪斜、店铺广告牌亮灯', requirePhoto: true, required: true }
     ],
     status: 'active',
     createdAt: new Date().toISOString()
   },
   {
-    id: 'task002',
-    name: '安全检查',
-    description: '定期安全检查任务',
+    id: 'task_daily_inside',
+    name: '日巡检-店内区域',
+    description: '每日例行检查店内各项工作',
+    taskType: 'daily',
     items: [
-      {
-        id: 'item005',
-        title: '检查消防设施',
-        description: '检查消防栓、灭火器是否完好',
-        requirePhoto: true,
-        required: true
-      },
-      {
-        id: 'item006',
-        title: '检查安全通道',
-        description: '检查安全通道是否畅通',
-        requirePhoto: true,
-        required: true
-      }
+      { id: 'item_i1', title: '店内卫生', description: '各处清洁、地面无污渍水渍、卫生间干净、无卫生死角', requirePhoto: true, required: true },
+      { id: 'item_i2', title: '货品排面', description: '饱满整齐、每个品类货架充足、品类齐全、补货齐全', requirePhoto: true, required: true },
+      { id: 'item_i3', title: '日期检查', description: '每个班次定时检查，找出临期和过期品', requirePhoto: false, required: true },
+      { id: 'item_i4', title: '价签检查', description: '一一对应、每天抽检一个品类、无遗漏标价错误、无过期活动价签', requirePhoto: true, required: true },
+      { id: 'item_i5', title: '电气设备检查', description: '冰柜、冷柜、OC柜、烧烤柜、烤箱、咖啡机等正常运行，灯、监控正常', requirePhoto: true, required: true },
+      { id: 'item_i6', title: '店员状态', description: '精神饱满、熟悉促销活动、工作服干净整洁无污渍', requirePhoto: false, required: true },
+      { id: 'item_i7', title: '面销情况检查', description: '每个班次面销达标', requirePhoto: false, required: true },
+      { id: 'item_i8', title: '群销检查', description: '按时发送群消息、质量达标、不应付', requirePhoto: false, required: true },
+      { id: 'item_i9', title: '交接表检查', description: '拍照发到工作群、针对交接表进行抽检、防止应付', requirePhoto: true, required: true },
+      { id: 'item_i10', title: '线上平台检查', description: '当前评分情况、无停止接单、新增差评、回复率、回复速度达标', requirePhoto: false, required: true },
+      { id: 'item_i11', title: '盘点', description: '盘点进行、分区盘点进行、每天至少3个班次盘点', requirePhoto: false, required: true },
+      { id: 'item_i12', title: '业绩检查', description: '查看昨天和当天班次业绩情况、分析业绩变化原因、找出问题', requirePhoto: false, required: true },
+      { id: 'item_i13', title: '客诉处理', description: '线上线下客诉、当天处理完成', requirePhoto: false, required: true },
+      { id: 'item_i14', title: '废弃商品检查', description: '明细检查确认', requirePhoto: true, required: true },
+      { id: 'item_i15', title: '临期商品促销', description: '临期商品提前促销、店员推销、设立临期商品展销区', requirePhoto: true, required: true },
+      { id: 'item_i16', title: '存缴营业款', description: '按规定存缴营业款', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_night_shift',
+    name: '夜班工作检查',
+    description: '检查夜班各项工作完成情况',
+    taskType: 'daily',
+    items: [
+      { id: 'item_n1', title: '查看监控夜班工作', description: '工作量饱和、仓库整理完成、排面补货完成', requirePhoto: false, required: true },
+      { id: 'item_n2', title: '验货情况检查', description: '无遗漏、无破损、无多验货少收货', requirePhoto: true, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_daily_keywork',
+    name: '日巡检-重点工作',
+    description: '每日重点工作检查',
+    taskType: 'daily',
+    items: [
+      { id: 'item_k1', title: '业绩分析', description: '当天和昨天业绩分析、多维度分析销量原因', requirePhoto: false, required: true },
+      { id: 'item_k2', title: '订货', description: '多维度订货（天气、节假日、展会、学校、产品）', requirePhoto: false, required: true },
+      { id: 'item_k3', title: '废弃检查', description: '每天80-100元控制、拍照发群、每周打印废弃表', requirePhoto: true, required: true },
+      { id: 'item_k4', title: '促销活动执行', description: '抽奖、满赠等活动执行', requirePhoto: false, required: true },
+      { id: 'item_k5', title: '线上平台维护', description: '差评处理、评分、在线检查、三个达标、加热、库存', requirePhoto: false, required: true },
+      { id: 'item_k6', title: '面销', description: '不同时间/人群/商品推荐、下发品类、发布结果', requirePhoto: false, required: true },
+      { id: 'item_k7', title: '群销', description: '按时发消息、每个班次至少2条、每天至少6条', requirePhoto: false, required: true },
+      { id: 'item_k8', title: '临期商品促销', description: '长保商品、非日配商品提前促销', requirePhoto: true, required: true },
+      { id: 'item_k9', title: '补货', description: '确定补货时间点', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_weekly_saturday',
+    name: '周任务-周六',
+    description: '每周六固定任务',
+    taskType: 'weekly',
+    weeklyDay: 6,
+    items: [
+      { id: 'item_w1', title: '排班', description: '安排下周班次', requirePhoto: false, required: true },
+      { id: 'item_w2', title: '核查考勤', description: '核查本周钉钉考勤签到情况、员工打卡异常处理', requirePhoto: false, required: true },
+      { id: 'item_w3', title: '确认本周工作', description: '确认本周内每日例行工作完成情况', requirePhoto: false, required: true },
+      { id: 'item_w4', title: '制定下周计划', description: '制定下周各项工作计划', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_weekly_wednesday',
+    name: '周任务-周三',
+    description: '每周三固定任务',
+    taskType: 'weekly',
+    weeklyDay: 3,
+    items: [
+      { id: 'item_w5', title: '学习月报', description: '学习月报、关注月度促销信息', requirePhoto: false, required: true },
+      { id: 'item_w6', title: '面销提醒会', description: '开会提醒员工做好面销', requirePhoto: false, required: true },
+      { id: 'item_w7', title: '订烟', description: '每周三订烟', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_weekly_thursday',
+    name: '周任务-周四',
+    description: '每周四固定任务',
+    taskType: 'weekly',
+    weeklyDay: 4,
+    items: [
+      { id: 'item_w8', title: '香烟盘点', description: '每周四香烟盘点', requirePhoto: true, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_monthly_1st',
+    name: '月任务-1日',
+    description: '每月1日固定任务',
+    taskType: 'monthly',
+    monthlyDay: 1,
+    items: [
+      { id: 'item_m1', title: '检查促销价格', description: '查看促销商品是否执行促销价格', requirePhoto: true, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_monthly_2nd',
+    name: '月任务-2日',
+    description: '每月2日固定任务',
+    taskType: 'monthly',
+    monthlyDay: 2,
+    items: [
+      { id: 'item_m2', title: '提交考勤表', description: '每月2号提交考勤表', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_monthly_15th_30th',
+    name: '月任务-15/30日',
+    description: '每月15日、30日固定任务',
+    taskType: 'monthly',
+    monthlyDays: [15, 30],
+    items: [
+      { id: 'item_m3', title: '检查电表数', description: '检查电表数', requirePhoto: true, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_monthly_25th',
+    name: '月任务-25日',
+    description: '每月25日固定任务',
+    taskType: 'monthly',
+    monthlyDay: 25,
+    items: [
+      { id: 'item_m4', title: '学习月报', description: '学习月报、关注下月促销信息、促销商品方式', requirePhoto: false, required: true },
+      { id: 'item_m5', title: '确认下月重要节点', description: '确认下月节假日等重要时间节点', requirePhoto: false, required: true },
+      { id: 'item_m6', title: '制定促销计划', description: '提前制定促销计划方案', requirePhoto: false, required: true },
+      { id: 'item_m7', title: '制定人员规划', description: '制定人员规划、月底前报经理', requirePhoto: false, required: true }
+    ],
+    status: 'active',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task_monthly_30before',
+    name: '月任务-30日前',
+    description: '每月30日前完成的任务',
+    taskType: 'monthly',
+    monthlyDay: 30,
+    items: [
+      { id: 'item_m8', title: '鲜食商品盘点', description: '盘点鲜食商品和鲜食易耗品', requirePhoto: true, required: true },
+      { id: 'item_m9', title: '准备台账调整', description: '准备台账调整、整理下架商品、退货', requirePhoto: false, required: true },
+      { id: 'item_m10', title: '补印价签', description: '及时补印价签', requirePhoto: false, required: true },
+      { id: 'item_m11', title: '新品检查', description: '查看新品是否全部到位', requirePhoto: true, required: true },
+      { id: 'item_m12', title: '促销材料检查', description: '促销海报、促销商品全部到位', requirePhoto: true, required: true },
+      { id: 'item_m13', title: '新员工手续', description: '健康证、银行信息提交、投保、合同办理、转正、个人交社保信息收集', requirePhoto: false, required: true }
     ],
     status: 'active',
     createdAt: new Date().toISOString()

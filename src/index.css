@@ -891,6 +891,32 @@ body {
   color: var(--text-tertiary);
 }
 
+/* 任务类型标签 */
+.task-type-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  gap: 4px;
+}
+
+.task-type-tag.daily {
+  background: #e6f4ff;
+  color: var(--primary-color);
+}
+
+.task-type-tag.weekly {
+  background: #f6ffed;
+  color: var(--success-color);
+}
+
+.task-type-tag.monthly {
+  background: #fff7e6;
+  color: var(--warning-color);
+}
+
 /* 快捷操作 */
 .quick-actions {
   display: grid;

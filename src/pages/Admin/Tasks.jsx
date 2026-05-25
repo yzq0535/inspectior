@@ -8,6 +8,9 @@ export default function AdminTasks() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    taskType: 'daily',
+    weeklyDay: '',
+    monthlyDay: '',
     items: []
   });
   const [newItem, setNewItem] = useState({
@@ -54,6 +57,9 @@ export default function AdminTasks() {
     setFormData({
       name: task.name,
       description: task.description,
+      taskType: task.taskType || 'daily',
+      weeklyDay: task.weeklyDay || '',
+      monthlyDay: task.monthlyDay || '',
       items: [...task.items]
     });
     setShowModal(true);
@@ -103,6 +109,7 @@ export default function AdminTasks() {
           <thead>
             <tr>
               <th>任务名称</th>
+              <th>类型</th>
               <th>描述</th>
               <th>检查项</th>
               <th>状态</th>
@@ -113,6 +120,12 @@ export default function AdminTasks() {
             {tasks.map((task) => (
               <tr key={task.id}>
                 <td><strong>{task.name}</strong></td>
+                <td>
+                  {task.taskType === 'daily' && <span className="task-type-tag daily">每日</span>}
+                  {task.taskType === 'weekly' && <span className="task-type-tag weekly">每周{task.weeklyDay ? `周${['日','一','二','三','四','五','六'][task.weeklyDay]}` : ''}</span>}
+                  {task.taskType === 'monthly' && <span className="task-type-tag monthly">每月{task.monthlyDay ? `${task.monthlyDay}日` : task.monthlyDays ? `${task.monthlyDays.join('、')}日` : ''}</span>}
+                  {!task.taskType && <span className="task-type-tag">普通</span>}
+                </td>
                 <td className="truncate" style={{maxWidth: '200px'}}>{task.description}</td>
                 <td>
                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '4px'}}>
@@ -172,6 +185,73 @@ export default function AdminTasks() {
                     placeholder="例如：日常巡检"
                     required
                   />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">任务类型</label>
+                  <div style={{display: 'flex', gap: '12px', marginBottom: '12px'}}>
+                    <label className="checkbox-item" style={{display: 'flex', alignItems: 'center', gap: '6px', margin: 0}}>
+                      <input
+                        type="radio"
+                        name="taskType"
+                        value="daily"
+                        checked={formData.taskType === 'daily'}
+                        onChange={(e) => setFormData({ ...formData, taskType: e.target.value, weeklyDay: '', monthlyDay: '' })}
+                      />
+                      <span>每日任务</span>
+                    </label>
+                    <label className="checkbox-item" style={{display: 'flex', alignItems: 'center', gap: '6px', margin: 0}}>
+                      <input
+                        type="radio"
+                        name="taskType"
+                        value="weekly"
+                        checked={formData.taskType === 'weekly'}
+                        onChange={(e) => setFormData({ ...formData, taskType: e.target.value, monthlyDay: '' })}
+                      />
+                      <span>每周任务</span>
+                    </label>
+                    <label className="checkbox-item" style={{display: 'flex', alignItems: 'center', gap: '6px', margin: 0}}>
+                      <input
+                        type="radio"
+                        name="taskType"
+                        value="monthly"
+                        checked={formData.taskType === 'monthly'}
+                        onChange={(e) => setFormData({ ...formData, taskType: e.target.value, weeklyDay: '' })}
+                      />
+                      <span>每月任务</span>
+                    </label>
+                  </div>
+                  
+                  {formData.taskType === 'weekly' && (
+                    <div>
+                      <label className="form-label">选择星期</label>
+                      <select
+                        className="form-input"
+                        value={formData.weeklyDay}
+                        onChange={(e) => setFormData({ ...formData, weeklyDay: parseInt(e.target.value) })}
+                      >
+                        <option value="">请选择</option>
+                        {['日','一','二','三','四','五','六'].map((day, i) => (
+                          <option key={i} value={i}>周{day}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  
+                  {formData.taskType === 'monthly' && (
+                    <div>
+                      <label className="form-label">选择日期</label>
+                      <input
+                        className="form-input"
+                        type="number"
+                        min="1"
+                        max="31"
+                        value={formData.monthlyDay}
+                        onChange={(e) => setFormData({ ...formData, monthlyDay: parseInt(e.target.value) })}
+                        placeholder="例如：15"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
