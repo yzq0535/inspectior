@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getTasks, addTask, updateTask, deleteTask } from '../../data';
+import { STORAGE_KEYS, removeStorage } from '../../utils/storage';
 
 export default function AdminTasks() {
   const [tasks, setTasks] = useState(getTasks());
@@ -71,6 +72,15 @@ export default function AdminTasks() {
     }
   };
 
+  const handleResetData = () => {
+    if (confirm('确定重置所有数据吗？这将清除所有任务、分配和巡检记录，恢复到初始状态！')) {
+      Object.values(STORAGE_KEYS).forEach(key => {
+        removeStorage(key);
+      });
+      window.location.reload();
+    }
+  };
+
   const toggleStatus = (task) => {
     const newStatus = task.status === 'active' ? 'inactive' : 'active';
     setTasks(updateTask(task.id, { status: newStatus }));
@@ -99,9 +109,14 @@ export default function AdminTasks() {
     <div>
       <div className="page-header">
         <h1 className="page-title">任务管理</h1>
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-          添加任务
-        </button>
+        <div style={{display: 'flex', gap: '12px'}}>
+          <button className="btn btn-danger" onClick={handleResetData}>
+            重置数据
+          </button>
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            添加任务
+          </button>
+        </div>
       </div>
 
       <div className="card">
