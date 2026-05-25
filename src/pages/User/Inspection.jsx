@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../../context/UserContext';
-import { getTaskById, addInspection, saveDraft, getDraft, checkTodaySubmitted, getAbnormalTasks, getAssignments } from '../../data';
+import { getTaskById, getAbnormalTaskById, addInspection, saveDraft, getDraft, checkTodaySubmitted, getAbnormalTasks, getAssignments, completeAbnormalTask } from '../../data';
 
 export default function Inspection() {
   const { user } = useUser();
@@ -23,7 +23,24 @@ export default function Inspection() {
     let taskData = null;
 
     if (tid) {
+      // 先尝试从普通任务中查找
       taskData = getTaskById(tid);
+      
+      // 如果没找到，尝试从异常任务中查找
+      if (!taskData) {
+        const abnormalTask = getAbnormalTaskById(tid);
+        if (abnormalTask) {
+          taskData = {
+            id: abnormalTask.id,
+            name: abnormalTask.name,
+            description: abnormalTask.description,
+            items: abnormalTask.items,
+            status: 'active',
+            isAbnormal: true
+          };
+        }
+      }
+      
       setTask(taskData);
     }
     if (aid) {
@@ -181,6 +198,14 @@ export default function Inspection() {
       date: new Date().toISOString().split('T')[0],
       items: Object.values(formData)
     };
+
+    // 如果是异常任务，标记为完成
+    if (task?.isAbnormal) {
+      completeAbnormalTask(task.id, user.id);
+      alert('异常任务已处理完成！');
+      window.history.back();
+      return;
+    }
 
     const result = addInspection(inspection);
     setIsSubmitted(true);

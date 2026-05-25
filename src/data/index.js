@@ -523,6 +523,10 @@ export function getTaskById(id) {
   return getTasks().find(t => t.id === id);
 }
 
+export function getAbnormalTaskById(id) {
+  return getAbnormalTasks().find(t => t.id === id);
+}
+
 export function getAssignmentById(id) {
   return getAssignments().find(a => a.id === id);
 }
