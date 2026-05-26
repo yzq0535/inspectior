@@ -1,6 +1,10 @@
 import { STORAGE_KEYS, setStorage, getStorage, removeStorage, generateId } from '../utils/storage';
 import { authAPI, userAPI, taskAPI, assignmentAPI, inspectionAPI, abnormalTaskAPI, ledgerAPI } from '../api';
 
+// 导出别名
+export { setStorage as setCurrentUser, removeStorage as clearCurrentUser };
+export { submitInspection as addInspection };
+
 // 默认数据（用于首次初始化）
 const defaultUsers = [
   {
@@ -112,7 +116,7 @@ let apiAvailable = true;
 // 测试 API 连接
 export async function testAPI() {
   try {
-    const response = await fetch('http://localhost:3000/health');
+    const response = await fetch('http://192.168.47.135:3000/health');
     apiAvailable = response.ok;
     return apiAvailable;
   } catch {
