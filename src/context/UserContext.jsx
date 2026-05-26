@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { initData, getCurrentUser, setCurrentUser, clearCurrentUser, getUsers } from '../data';
+import { initData, getCurrentUser, setCurrentUser, clearCurrentUser, getUsers, login as apiLogin } from '../data';
 
 const UserContext = createContext(null);
 
@@ -16,15 +16,18 @@ export function UserProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = (userId) => {
-    const users = getUsers();
-    const user = users.find(u => u.id === userId);
-    if (user) {
-      setCurrentUser(user);
-      setUser(user);
-      return true;
+  const login = async (username, password) => {
+    try {
+      const loggedInUser = await apiLogin(username, password);
+      if (loggedInUser) {
+        setUser(loggedInUser);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('登录错误:', error);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {

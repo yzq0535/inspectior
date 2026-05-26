@@ -1,5 +1,7 @@
 import { STORAGE_KEYS, setStorage, getStorage, removeStorage, generateId } from '../utils/storage';
+import { authAPI, userAPI, taskAPI, assignmentAPI, inspectionAPI, abnormalTaskAPI, ledgerAPI } from '../api';
 
+// 默认数据（用于首次初始化）
 const defaultUsers = [
   {
     id: 'admin001',
@@ -101,117 +103,23 @@ const defaultTasks = [
     ],
     status: 'active',
     createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_weekly_saturday',
-    name: '周任务-周六',
-    description: '每周六固定任务',
-    taskType: 'weekly',
-    weeklyDay: 6,
-    items: [
-      { id: 'item_w1', title: '排班', description: '安排下周班次', requirePhoto: false, required: true },
-      { id: 'item_w2', title: '核查考勤', description: '核查本周钉钉考勤签到情况、员工打卡异常处理', requirePhoto: false, required: true },
-      { id: 'item_w3', title: '确认本周工作', description: '确认本周内每日例行工作完成情况', requirePhoto: false, required: true },
-      { id: 'item_w4', title: '制定下周计划', description: '制定下周各项工作计划', requirePhoto: false, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_weekly_wednesday',
-    name: '周任务-周三',
-    description: '每周三固定任务',
-    taskType: 'weekly',
-    weeklyDay: 3,
-    items: [
-      { id: 'item_w5', title: '学习月报', description: '学习月报、关注月度促销信息', requirePhoto: false, required: true },
-      { id: 'item_w6', title: '面销提醒会', description: '开会提醒员工做好面销', requirePhoto: false, required: true },
-      { id: 'item_w7', title: '订烟', description: '每周三订烟', requirePhoto: false, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_weekly_thursday',
-    name: '周任务-周四',
-    description: '每周四固定任务',
-    taskType: 'weekly',
-    weeklyDay: 4,
-    items: [
-      { id: 'item_w8', title: '香烟盘点', description: '每周四香烟盘点', requirePhoto: true, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_monthly_1st',
-    name: '月任务-1日',
-    description: '每月1日固定任务',
-    taskType: 'monthly',
-    monthlyDay: 1,
-    items: [
-      { id: 'item_m1', title: '检查促销价格', description: '查看促销商品是否执行促销价格', requirePhoto: true, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_monthly_2nd',
-    name: '月任务-2日',
-    description: '每月2日固定任务',
-    taskType: 'monthly',
-    monthlyDay: 2,
-    items: [
-      { id: 'item_m2', title: '提交考勤表', description: '每月2号提交考勤表', requirePhoto: false, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_monthly_15th_30th',
-    name: '月任务-15/30日',
-    description: '每月15日、30日固定任务',
-    taskType: 'monthly',
-    monthlyDays: [15, 30],
-    items: [
-      { id: 'item_m3', title: '检查电表数', description: '检查电表数', requirePhoto: true, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_monthly_25th',
-    name: '月任务-25日',
-    description: '每月25日固定任务',
-    taskType: 'monthly',
-    monthlyDay: 25,
-    items: [
-      { id: 'item_m4', title: '学习月报', description: '学习月报、关注下月促销信息、促销商品方式', requirePhoto: false, required: true },
-      { id: 'item_m5', title: '确认下月重要节点', description: '确认下月节假日等重要时间节点', requirePhoto: false, required: true },
-      { id: 'item_m6', title: '制定促销计划', description: '提前制定促销计划方案', requirePhoto: false, required: true },
-      { id: 'item_m7', title: '制定人员规划', description: '制定人员规划、月底前报经理', requirePhoto: false, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'task_monthly_30before',
-    name: '月任务-30日前',
-    description: '每月30日前完成的任务',
-    taskType: 'monthly',
-    monthlyDay: 30,
-    items: [
-      { id: 'item_m8', title: '鲜食商品盘点', description: '盘点鲜食商品和鲜食易耗品', requirePhoto: true, required: true },
-      { id: 'item_m9', title: '准备台账调整', description: '准备台账调整、整理下架商品、退货', requirePhoto: false, required: true },
-      { id: 'item_m10', title: '补印价签', description: '及时补印价签', requirePhoto: false, required: true },
-      { id: 'item_m11', title: '新品检查', description: '查看新品是否全部到位', requirePhoto: true, required: true },
-      { id: 'item_m12', title: '促销材料检查', description: '促销海报、促销商品全部到位', requirePhoto: true, required: true },
-      { id: 'item_m13', title: '新员工手续', description: '健康证、银行信息提交、投保、合同办理、转正、个人交社保信息收集', requirePhoto: false, required: true }
-    ],
-    status: 'active',
-    createdAt: new Date().toISOString()
   }
 ];
+
+// API 是否可用
+let apiAvailable = true;
+
+// 测试 API 连接
+export async function testAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/health');
+    apiAvailable = response.ok;
+    return apiAvailable;
+  } catch {
+    apiAvailable = false;
+    return false;
+  }
+}
 
 export function initData() {
   if (!getStorage(STORAGE_KEYS.USERS)) {
@@ -222,9 +130,9 @@ export function initData() {
   }
   if (!getStorage(STORAGE_KEYS.ASSIGNMENTS)) {
     const assignments = [
-      { id: 'assign001', taskId: 'task001', userId: 'user001', createdAt: new Date().toISOString() },
-      { id: 'assign002', taskId: 'task001', userId: 'user002', createdAt: new Date().toISOString() },
-      { id: 'assign003', taskId: 'task002', userId: 'user001', createdAt: new Date().toISOString() }
+      { id: 'assign001', taskId: 'task_daily_outside', userId: 'user001', createdAt: new Date().toISOString() },
+      { id: 'assign002', taskId: 'task_daily_inside', userId: 'user001', createdAt: new Date().toISOString() },
+      { id: 'assign003', taskId: 'task_daily_outside', userId: 'user002', createdAt: new Date().toISOString() }
     ];
     setStorage(STORAGE_KEYS.ASSIGNMENTS, assignments);
   }
@@ -239,20 +147,113 @@ export function initData() {
   }
 }
 
+// 登录 - 优先使用 API
+export async function login(username, password) {
+  if (apiAvailable) {
+    try {
+      const result = await authAPI.login(username, password);
+      if (result.code === 200) {
+        localStorage.setItem('token', result.data.token);
+        setStorage(STORAGE_KEYS.CURRENT_USER, result.data.user);
+        return result.data.user;
+      }
+    } catch (error) {
+      console.error('API 登录失败，回退到本地存储');
+      apiAvailable = false;
+    }
+  }
+
+  // 回退到本地存储
+  const users = getUsers();
+  const user = users.find(u => u.id === username || u.email === username);
+  
+  // 本地存储不验证密码（演示模式）
+  if (user) {
+    setStorage(STORAGE_KEYS.CURRENT_USER, user);
+    return user;
+  }
+  return null;
+}
+
+export function logout() {
+  localStorage.removeItem('token');
+  removeStorage(STORAGE_KEYS.CURRENT_USER);
+}
+
 export function getUsers() {
   return getStorage(STORAGE_KEYS.USERS) || [];
+}
+
+export async function fetchUsers() {
+  if (apiAvailable) {
+    try {
+      const result = await userAPI.getAll();
+      if (result.code === 200) {
+        setStorage(STORAGE_KEYS.USERS, result.data);
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return getUsers();
 }
 
 export function getTasks() {
   return getStorage(STORAGE_KEYS.TASKS) || [];
 }
 
+export async function fetchTasks() {
+  if (apiAvailable) {
+    try {
+      const result = await taskAPI.getAll();
+      if (result.code === 200) {
+        setStorage(STORAGE_KEYS.TASKS, result.data);
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return getTasks();
+}
+
 export function getAssignments() {
   return getStorage(STORAGE_KEYS.ASSIGNMENTS) || [];
 }
 
+export async function fetchMyAssignments() {
+  if (apiAvailable) {
+    try {
+      const result = await assignmentAPI.getMy();
+      if (result.code === 200) {
+        setStorage(STORAGE_KEYS.ASSIGNMENTS, result.data);
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return getAssignments();
+}
+
 export function getInspections() {
   return getStorage(STORAGE_KEYS.INSPECTIONS) || [];
+}
+
+export async function fetchInspections(params = {}) {
+  if (apiAvailable) {
+    try {
+      const result = await inspectionAPI.getAll(params);
+      if (result.code === 200) {
+        setStorage(STORAGE_KEYS.INSPECTIONS, result.data);
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return getInspections();
 }
 
 export function getDrafts() {
@@ -263,16 +264,23 @@ export function getAbnormalTasks() {
   return getStorage(STORAGE_KEYS.ABNORMAL_TASKS) || [];
 }
 
+export async function fetchMyAbnormalTasks() {
+  if (apiAvailable) {
+    try {
+      const result = await abnormalTaskAPI.getMy();
+      if (result.code === 200) {
+        setStorage(STORAGE_KEYS.ABNORMAL_TASKS, result.data);
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return getAbnormalTasks();
+}
+
 export function getCurrentUser() {
   return getStorage(STORAGE_KEYS.CURRENT_USER);
-}
-
-export function setCurrentUser(user) {
-  return setStorage(STORAGE_KEYS.CURRENT_USER, user);
-}
-
-export function clearCurrentUser() {
-  removeStorage(STORAGE_KEYS.CURRENT_USER);
 }
 
 export function addTask(task) {
@@ -285,6 +293,21 @@ export function addTask(task) {
   });
   setStorage(STORAGE_KEYS.TASKS, tasks);
   return tasks;
+}
+
+export async function createTask(task) {
+  if (apiAvailable) {
+    try {
+      const result = await taskAPI.create(task);
+      if (result.code === 200) {
+        await fetchTasks();
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return addTask(task);
 }
 
 export function updateTask(id, updates) {
@@ -314,13 +337,30 @@ export function addAssignment(assignment) {
   return assignments;
 }
 
+export async function createAssignment(assignment) {
+  if (apiAvailable) {
+    try {
+      const result = await assignmentAPI.create({
+        task_id: assignment.taskId,
+        user_id: assignment.userId
+      });
+      if (result.code === 200) {
+        await fetchMyAssignments();
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return addAssignment(assignment);
+}
+
 export function deleteAssignment(id) {
   const assignments = getAssignments().filter(a => a.id !== id);
   setStorage(STORAGE_KEYS.ASSIGNMENTS, assignments);
   return assignments;
 }
 
-// 创建异常子任务
 export function createAbnormalTask(originalTask, abnormalItems, createdBy, reason) {
   const abnormalTasks = getAbnormalTasks();
   const now = new Date();
@@ -346,7 +386,6 @@ export function createAbnormalTask(originalTask, abnormalItems, createdBy, reaso
   abnormalTasks.push(abnormalTask);
   setStorage(STORAGE_KEYS.ABNORMAL_TASKS, abnormalTasks);
   
-  // 同时创建分配记录
   addAssignment({
     taskId: abnormalTask.id,
     userId: abnormalItems[0]?.userId || createdBy,
@@ -357,7 +396,6 @@ export function createAbnormalTask(originalTask, abnormalItems, createdBy, reaso
   return abnormalTask;
 }
 
-// 获取用户的异常任务
 export function getUserAbnormalTasks(userId) {
   const abnormalTasks = getAbnormalTasks();
   const assignments = getAssignments();
@@ -368,7 +406,6 @@ export function getUserAbnormalTasks(userId) {
   });
 }
 
-// 完成异常任务
 export function completeAbnormalTask(abnormalTaskId, userId) {
   const abnormalTasks = getAbnormalTasks();
   const index = abnormalTasks.findIndex(t => t.id === abnormalTaskId);
@@ -381,11 +418,31 @@ export function completeAbnormalTask(abnormalTaskId, userId) {
   return abnormalTasks;
 }
 
-// 提交巡检记录
-export function addInspection(inspection) {
-  const inspections = getInspections();
+export async function submitInspection(inspection) {
+  if (apiAvailable) {
+    try {
+      const result = await inspectionAPI.create({
+        assignment_id: inspection.assignmentId,
+        task_id: inspection.taskId,
+        items: inspection.items.map(item => ({
+          item_id: item.itemId,
+          status: item.status,
+          remark: item.remark,
+          photos: item.photos || []
+        }))
+      });
+      if (result.code === 200) {
+        await fetchInspections();
+        await fetchMyAbnormalTasks();
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
   
-  // 检查是否有异常项
+  // 回退到本地存储
+  const inspections = getInspections();
   const abnormalItems = inspection.items.filter(item => item.status === 'abnormal');
   
   const newInspection = {
@@ -400,18 +457,12 @@ export function addInspection(inspection) {
   inspections.push(newInspection);
   setStorage(STORAGE_KEYS.INSPECTIONS, inspections);
   
-  // 如果有异常项，自动创建异常子任务
   if (abnormalItems.length > 0) {
     const task = getTaskById(inspection.taskId);
-    const originalAssignment = getAssignments().find(a => a.id === inspection.assignmentId);
-    
-    if (task && originalAssignment) {
+    if (task) {
       const abnormalTask = createAbnormalTask(
         task,
-        abnormalItems.map(item => ({
-          ...item,
-          userId: inspection.userId
-        })),
+        abnormalItems.map(item => ({ ...item, userId: inspection.userId })),
         inspection.userId,
         '用户自评异常'
       );
@@ -419,7 +470,6 @@ export function addInspection(inspection) {
     }
   }
   
-  // 删除草稿
   deleteDraft(inspection.assignmentId, inspection.userId);
   return { inspections, abnormalTask: newInspection.abnormalTaskId };
 }
@@ -438,7 +488,21 @@ export function updateInspection(id, updates) {
   return inspections;
 }
 
-// 管理员标记异常并创建子任务
+export async function reviewInspection(id, status, remark) {
+  if (apiAvailable) {
+    try {
+      const result = await inspectionAPI.review(id, status, remark);
+      if (result.code === 200) {
+        await fetchInspections();
+        return result.data;
+      }
+    } catch {
+      apiAvailable = false;
+    }
+  }
+  return updateInspection(id, { status, remark });
+}
+
 export function adminMarkAbnormal(inspectionId, abnormalItems, reason) {
   const inspections = getInspections();
   const inspection = inspections.find(i => i.id === inspectionId);
@@ -448,7 +512,6 @@ export function adminMarkAbnormal(inspectionId, abnormalItems, reason) {
   const task = getTaskById(inspection.taskId);
   if (!task) return null;
   
-  // 更新inspection的审核状态
   const updatedAbnormalItems = inspection.abnormalItems || [];
   abnormalItems.forEach(item => {
     if (!updatedAbnormalItems.find(i => i.itemId === item.itemId)) {
@@ -466,13 +529,9 @@ export function adminMarkAbnormal(inspectionId, abnormalItems, reason) {
     status: 'rejected'
   });
   
-  // 创建异常子任务
   const abnormalTask = createAbnormalTask(
     task,
-    abnormalItems.map(item => ({
-      ...item,
-      userId: inspection.userId
-    })),
+    abnormalItems.map(item => ({ ...item, userId: inspection.userId })),
     inspection.userId,
     reason || '管理员审核异常'
   );
@@ -480,7 +539,6 @@ export function adminMarkAbnormal(inspectionId, abnormalItems, reason) {
   return abnormalTask;
 }
 
-// 草稿操作
 export function saveDraft(draft) {
   const drafts = getDrafts();
   const index = drafts.findIndex(
