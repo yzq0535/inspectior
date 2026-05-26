@@ -1,5 +1,5 @@
 // API 服务配置
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = 'http://192.168.47.135:3000/api';
 
 // 请求拦截器
 const request = async (url, options = {}) => {
