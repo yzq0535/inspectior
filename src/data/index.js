@@ -16,6 +16,14 @@ const defaultUsers = [
     email: 'admin@example.com'
   },
   {
+    id: 'boss001',
+    name: '老板',
+    avatar: '',
+    role: 'boss',
+    department: '总公司',
+    email: 'boss@example.com'
+  },
+  {
     id: 'user001',
     name: '张三',
     avatar: '',

@@ -40,7 +40,7 @@ export function UserProvider({ children }) {
     loading,
     login,
     logout,
-    isAdmin: user?.role === 'admin'
+    isAdmin: user?.role === 'admin' || user?.role === 'boss'
   };
 
   return (

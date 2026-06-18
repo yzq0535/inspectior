@@ -26,7 +26,7 @@ export default function Layout({ children }) {
       <div className="app-content">
         <aside className="sidebar">
           <nav className="sidebar-nav">
-            {user.role === 'admin' ? (
+            {(user.role === 'admin' || user.role === 'boss') ? (
               <>
                 <NavItem href="/admin">管理首页</NavItem>
                 <NavItem href="/admin/tasks">任务管理</NavItem>

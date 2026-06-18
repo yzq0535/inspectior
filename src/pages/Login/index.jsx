@@ -129,7 +129,7 @@ export default function Login() {
                     </div>
                     <div className="user-info">
                       <div className="user-name">{user.name}</div>
-                      <div className="user-role">{user.role === 'admin' ? '管理员' : user.department}</div>
+                      <div className="user-role">{(user.role === 'admin' || user.role === 'boss') ? '管理员' : user.department}</div>
                     </div>
                   </button>
                 ))}
